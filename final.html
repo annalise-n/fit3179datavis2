@@ -128,52 +128,85 @@
   <script>
     /* === Chart Definitions === */
 
-    const map = {
-      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-      "description": "Map showing public and private hospital locations across Australia.",
-      "width": 800,
-      "height": 600,
-      "projection": {"type": "mercator"},
-      "layer": [
+    const mapSpec = {
+        "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+        "description": "Interactive map showing public and private hospital locations with state filtering.",
+        "width": 800,
+        "height": 600,
+        "projection": {"type": "mercator"},
+        "params": [
+    {
+      "name": "SelectedState",
+      "value": "All States",
+      "bind": {
+        "input": "select",
+        "options": [
+          "All States",
+          "NSW",
+          "VIC",
+          "QLD",
+          "SA",
+          "WA",
+          "TAS",
+          "NT",
+          "ACT"
+        ],
+        "name": "Select a State: "
+      }
+    }
+  ],
+  "layer": [
+    {
+      "data": {
+        "url": "https://raw.githubusercontent.com/codeforgermany/click_that_hood/main/public/data/australia.geojson",
+        "format": {"type": "json"}
+      },
+      "mark": {"type": "geoshape", "fill": "#f5f5f5", "stroke": "#999"}
+    },
+    {
+      "data": {"url": "Aus_Public_Hospitals.csv"},
+      "transform": [
         {
-          "data": {
-            "url": "https://raw.githubusercontent.com/codeforgermany/click_that_hood/main/public/data/australia.geojson",
-            "format": {"type": "json"}
-          },
-          "mark": {"type": "geoshape", "fill": "#f8f8f8", "stroke": "#717171"}
-        },
-        {
-          "data": {"url": "Aus_Public_Hospitals.csv"},
-          "mark": {"type": "circle", "size": 60},
-          "encoding": {
-            "longitude": {"field": "x", "type": "quantitative"},
-            "latitude": {"field": "y", "type": "quantitative"},
-            "color": {"value": "#3e85ff"},
-            "tooltip": [
-              {"field": "Hospital Name", "title": "Hospital"},
-              {"field": "Category"},
-              {"field": "Suburb"},
-              {"field": "State"}
-            ]
-          }
-        },
-        {
-          "data": {"url": "Aus_Private_Hospitals.csv"},
-          "mark": {"type": "circle", "size": 60},
-          "encoding": {
-            "longitude": {"field": "x", "type": "quantitative"},
-            "latitude": {"field": "y", "type": "quantitative"},
-            "color": {"value": "#ff2a2a"},
-            "tooltip": [
-              {"field": "Hospital Name", "title": "Hospital"},
-              {"field": "Category"},
-              {"field": "Suburb"},
-              {"field": "State"}
-            ]
-          }
+          "filter": "SelectedState == 'All States' || datum.State == SelectedState"
         }
-      ]
-    };
+      ],
+      "mark": {"type": "circle", "size": 60, "color": "#1f77b4"},
+      "encoding": {
+        "longitude": {"field": "x", "type": "quantitative"},
+        "latitude": {"field": "y", "type": "quantitative"},
+        "tooltip": [
+          {"field": "Hospital Name", "title": "Hospital"},
+          {"field": "Category"},
+          {"field": "Suburb"},
+          {"field": "State"}
+        ]
+      }
+    },
+    {
+      "data": {"url": "Aus_Private_Hospitals.csv"},
+      "transform": [
+        {
+          "filter": "SelectedState == 'All States' || datum.State == SelectedState"
+        }
+      ],
+      "mark": {"type": "circle", "size": 60, "color": "#ff2a2a"},
+      "encoding": {
+        "longitude": {"field": "x", "type": "quantitative"},
+        "latitude": {"field": "y", "type": "quantitative"},
+        "tooltip": [
+          {"field": "Hospital Name", "title": "Hospital"},
+          {"field": "Category"},
+          {"field": "Suburb"},
+          {"field": "State"}
+        ]
+      }
+    }
+  ],
+  "config": {
+    "legend": {"titleFontSize": 14, "labelFontSize": 12},
+    "view": {"stroke": null}
+  }
+};
 
     const hospitalState = {
       "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
@@ -241,7 +274,7 @@
     };
 
     /* === Embed charts === */
-    vegaEmbed("#map", map);
+    vegaEmbed("#map", mapSpec);
     vegaEmbed("#hospitalState", hospitalState);
     vegaEmbed("#funding", funding);
     vegaEmbed("#workforce", workforce);
