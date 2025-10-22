@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Australian Health Data Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+  <style>
+    /* === General Page Styling === */
+    body {
+      font-family: "Segoe UI", Roboto, sans-serif;
+      background: #f5f8fc;
+      color: #222;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background: linear-gradient(90deg, #3e85ff, #ff2a2a);
+      color: white;
+      text-align: center;
+      padding: 40px 20px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 2.4rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    header p {
+      font-size: 1.1rem;
+      opacity: 0.9;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    /* === Chart Sections === */
+    section {
+      background: #ffffff;
+      border-radius: 14px;
+      padding: 30px;
+      margin-bottom: 50px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    section:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      color: #003366;
+      margin-bottom: 8px;
+    }
+
+    p.subtitle {
+      color: #555;
+      font-size: 0.95rem;
+      margin-bottom: 25px;
+    }
+
+    /* === Footer === */
+    footer {
+      text-align: center;
+      font-size: 0.85rem;
+      color: #666;
+      padding: 20px;
+      background: #f0f3f9;
+      border-top: 1px solid #ddd;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>Australian Health Data Dashboard</h1>
+    <p>Visualising hospital distribution, funding, capacity, and workforce trends across Australia</p>
+  </header>
+
+  <div class="container">
+
+    <section>
+      <h2>Hospital Locations Across Australia</h2>
+      <p class="subtitle">Public (blue) and private (red) hospitals plotted over Australia's map.</p>
+      <div id="map"></div>
+    </section>
+
+    <section>
+      <h2>Hospitals per State</h2>
+      <p class="subtitle">Comparison of public and private hospitals in each state and territory.</p>
+      <div id="hospitalState"></div>
+    </section>
+
+    <section>
+      <h2>Hospital Expenditure by Sector</h2>
+      <p class="subtitle">Annual funding (in millions) for public and private hospitals from 2018-2023.</p>
+      <div id="funding"></div>
+    </section>
+
+    <section>
+      <h2>Healthcare Workforce Growth</h2>
+      <p class="subtitle">Full-time public health workforce trends across job categories (2019-2024).</p>
+      <div id="workforce"></div>
+    </section>
+
+    <section>
+      <h2>Hospital Beds per 1,000 Population</h2>
+      <p class="subtitle">Heatmap showing changes in bed availability relative to state populations over time.</p>
+      <div id="beds"></div>
+    </section>
+
+  </div>
+
+  <footer>
+    © 2025 Australian Health Data Dashboard | Data sources: AIHW, ABS
+  </footer>
+
+  <script>
+    /* === Chart Definitions === */
+
+    const map = {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "description": "Map showing public and private hospital locations across Australia.",
+      "width": 800,
+      "height": 600,
+      "projection": {"type": "mercator"},
+      "layer": [
+        {
+          "data": {
+            "url": "https://raw.githubusercontent.com/codeforgermany/click_that_hood/main/public/data/australia.geojson",
+            "format": {"type": "json"}
+          },
+          "mark": {"type": "geoshape", "fill": "#f8f8f8", "stroke": "#717171"}
+        },
+        {
+          "data": {"url": "Aus_Public_Hospitals.csv"},
+          "mark": {"type": "circle", "size": 60},
+          "encoding": {
+            "longitude": {"field": "x", "type": "quantitative"},
+            "latitude": {"field": "y", "type": "quantitative"},
+            "color": {"value": "#3e85ff"},
+            "tooltip": [
+              {"field": "Hospital Name", "title": "Hospital"},
+              {"field": "Category"},
+              {"field": "Suburb"},
+              {"field": "State"}
+            ]
+          }
+        },
+        {
+          "data": {"url": "Aus_Private_Hospitals.csv"},
+          "mark": {"type": "circle", "size": 60},
+          "encoding": {
+            "longitude": {"field": "x", "type": "quantitative"},
+            "latitude": {"field": "y", "type": "quantitative"},
+            "color": {"value": "#ff2a2a"},
+            "tooltip": [
+              {"field": "Hospital Name", "title": "Hospital"},
+              {"field": "Category"},
+              {"field": "Suburb"},
+              {"field": "State"}
+            ]
+          }
+        }
+      ]
+    };
+
+    const hospitalState = {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "description": "Number of hospitals per state",
+      "width": 700,
+      "height": 400,
+      "data": {"url": "Hospitals_by_State.csv"},
+      "mark": "bar",
+      "encoding": {
+        "x": {"field": "State", "type": "ordinal", "title": "State"},
+        "y": {"field": "Count", "type": "quantitative", "title": "Number of Hospitals"},
+        "color": {"field": "Type", "type": "nominal", "scale": {"range": ["#ff2a2a","#3e85ff"]}},
+        "tooltip": [{"field": "State"}, {"field": "Type"}, {"field": "Count"}]
+      }
+    };
+
+    const funding = {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "description": "Grouped bar chart of hospital expenditure",
+      "width": 700,
+      "height": 400,
+      "data": {"url": "Funding.csv"},
+      "mark": "bar",
+      "encoding": {
+        "x": {"field": "Year", "type": "ordinal", "title": "Year"},
+        "y": {"field": "Expenditure", "type": "quantitative", "title": "Expenditure ($ million)"},
+        "color": {"field": "Type", "type": "nominal", "scale": {"range": ["#ff2a2a","#3e85ff"]}},
+        "tooltip": [{"field": "Year"}, {"field": "Type"}, {"field": "Expenditure"}]
+      }
+    };
+
+    const workforce = {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "description": "Multi-line chart showing workforce growth by profession",
+      "width": 750,
+      "height": 400,
+      "data": {"url": "FullTimePublic.csv"},
+      "mark": {"type": "line", "point": {"filled": true, "size": 60}, "strokeWidth": 3},
+      "encoding": {
+        "x": {"field": "Year", "type": "ordinal"},
+        "y": {"field": "Total Staff", "type": "quantitative"},
+        "color": {"field": "Job", "type": "nominal", "title": "Staff Category", "scale": {"scheme": "tableau10"}},
+        "tooltip": [{"field": "Job"}, {"field": "Year"}, {"field": "Total Staff", "format": ","}]
+      }
+    };
+
+    const beds = {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "description": "Heatmap showing beds per 1000 population by state over time",
+      "width": 700,
+      "height": 400,
+      "data": {"url": "Public_State_Beds.csv"},
+      "mark": "rect",
+      "encoding": {
+        "x": {"field": "Year", "type": "ordinal"},
+        "y": {"field": "State", "type": "ordinal"},
+        "color": {"field": "Per 1000 Population", "type": "quantitative", "scale": {"scheme": "reds"}},
+        "tooltip": [
+          {"field": "State"},
+          {"field": "Year"},
+          {"field": "Available Beds"},
+          {"field": "Per 1000 Population"}
+        ]
+      }
+    };
+
+    /* === Embed charts === */
+    vegaEmbed("#map", map);
+    vegaEmbed("#hospitalState", hospitalState);
+    vegaEmbed("#funding", funding);
+    vegaEmbed("#workforce", workforce);
+    vegaEmbed("#beds", beds);
+  </script>
+</body>
+</html>

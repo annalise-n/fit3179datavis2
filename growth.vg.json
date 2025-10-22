@@ -1,0 +1,19 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Multi-line chart showing workforce growth by profession",
+  "width": 750,
+  "height": 400,
+  "data": {"url": "FullTimePublic.csv"},
+  "mark": {"type": "line", "point": {"filled": true, "size": 60}, "strokeWidth": 3},
+  "encoding": {
+    "x": {"field": "Year", "type": "ordinal", "title": "Year"},
+    "y": {"field": "Total Staff", "type": "quantitative", "title": "Total Staff"},
+    "color": {"field": "Job", "type": "nominal", "title": "Staff Category", "scale": {"scheme": "tableau10"}},
+    "tooltip": [
+      {"field": "Job", "title": "Role"},
+      {"field": "Year"},
+      {"field": "Total Staff", "format": ","}
+    ]
+  },
+  "config": {"axis": {"labelFontSize": 12, "titleFontSize": 14}, "legend": {"labelFontSize": 12, "titleFontSize": 14}}
+}

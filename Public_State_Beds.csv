@@ -1,0 +1,46 @@
+State,Available Beds,Per 1000 Population,Year
+New South Wales,20722,2.58,2019-20
+New South Wales,20787,2.56,2020-21
+New South Wales,20623,2.55,2021-22
+New South Wales,21207,2.59,2022-23
+New South Wales,21238,2.54,2023-24		
+Victoria,14949,2.29,2019-20
+Victoria,14913,2.25,2020-21
+Victoria,14871,2.27,2021-22
+Victoria,15380,2.32,2022-23
+Victoria,15856,2.33,2023-24		
+Queensland,12889,2.53,2019-20
+Queensland,13032,2.52,2020-21
+Queensland,13142,2.52,2021-22
+Queensland,13344,2.51,2022-23
+Queensland,14021,2.57,2023-24		
+Western Australia,6034,2.27,2019-20
+Western Australia,6243,2.30,2020-21
+Western Australia,6356,2.31,2021-22
+Western Australia,6676,2.39,2022-23
+Western Australia,6871,2.38,2023-24		
+South Australia,4532,2.56,2019-20
+South Australia,4514,2.52,2020-21
+South Australia,4517,2.51,2021-22
+South Australia,4493,2.46,2022-23
+South Australia,5180,2.79,2023-24		
+Tasmania,1472,2.69,2019-20
+Tasmania,1583,2.84,2020-21
+Tasmania,1656,2.92,2021-22
+Tasmania,1671,2.92,2022-23
+Tasmania,1712,2.98,2023-24		
+Australian Capital Territory,1151,2.64,2019-20
+Australian Capital Territory,1189,2.67,2020-21
+Australian Capital Territory,1207,2.67,2021-22
+Australian Capital Territory,1233,2.67,2022-23
+Australian Capital Territory,--, --,2023-24		
+Northern Territory,977,3.96,2019-20
+Northern Territory,1072,4.33,2020-21
+Northern Territory,1072,4.32,2021-22
+Northern Territory,1046,4.13,2022-23
+Northern Territory,1057,4.10,2023-24		
+Total public hospitals,62726,2.48,2019-20
+Total public hospitals,63333,2.47,2020-21
+Total public hospitals,63444,2.47,2021-22
+Total public hospitals,65051,2.50,2022-23
+Total public hospitals,65935,2.47,2023-24		

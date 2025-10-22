@@ -1,0 +1,19 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Grouped bar chart of hospital expenditure",
+  "width": 700,
+  "height": 400,
+  "data": {"url": "Funding.csv"},
+  "mark": "bar",
+  "encoding": {
+    "x": {"field": "Year", "type": "ordinal"},
+    "y": {"field": "Expenditure", "type": "quantitative"},
+    "color": {"field": "Type", "type": "nominal", "scale":{"range":["#3e85ff","#ff2a2a"]}},
+    "tooltip": [
+      {"field": "Year"},
+      {"field": "Type"},
+      {"field": "Expenditure"}
+    ]
+  },
+  "column": {"field": "Type"}
+}

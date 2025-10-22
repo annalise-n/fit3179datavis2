@@ -1,0 +1,15 @@
+{
+  "$schema":"https://vega.github.io/schema/vega-lite/v5.json",
+  "description":"Number of hospitals per state",
+  "width":700,
+  "height":400,
+  "data":{"url":"Hospitals_by_State.csv"},
+  "mark":"bar",
+  "encoding":{
+    "x":{"field":"State","type":"ordinal"},
+    "y":{"field":"Count","type":"quantitative"},
+    "color":{"field":"Type","type":"nominal","scale":{"range":["#ff2a2a","#3e85ff"]}},
+    "tooltip":[{"field":"State"},{"field":"Type"},{"field":"Count"}]
+  },
+  "stack":"zero"
+}

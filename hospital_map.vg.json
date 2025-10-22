@@ -1,0 +1,48 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Map showing public and private hospital locations across Australia.",
+  "width": 800,
+  "height": 600,
+  "projection": {"type": "mercator"},
+  "layer": [
+    {
+      "data": {
+        "url": "https://raw.githubusercontent.com/codeforgermany/click_that_hood/main/public/data/australia.geojson",
+        "format": {"type": "json"}
+      },
+      "mark": {"type": "geoshape", "fill": "#f8f8f8", "stroke": "#717171"}
+    },
+    {
+      "data": {"url": "Aus_Public_Hospitals.csv"},
+      "mark": {"type": "circle", "size": 60},
+      "encoding": {
+        "longitude": {"field": "x", "type": "quantitative"},
+        "latitude": {"field": "y", "type": "quantitative"},
+        "color": {"value": "#3e85ff"},
+        "tooltip": [
+          {"field": "Hospital Name", "type": "nominal", "title": "Hospital"},
+          {"field": "Category", "type": "nominal"},
+          {"field": "Suburb", "type": "nominal"},
+          {"field": "State", "type": "nominal"}
+        ]
+      }
+    },
+    {
+      "data": {"url": "Aus_Private_Hospitals.csv"},
+      "mark": {"type": "circle", "size": 60},
+      "encoding": {
+        "longitude": {"field": "x", "type": "quantitative"},
+        "latitude": {"field": "y", "type": "quantitative"},
+        "color": {"value": "#ff2a2a"},
+        "tooltip": [
+          {"field": "Hospital Name", "type": "nominal", "title": "Hospital"},
+          {"field": "Category", "type": "nominal"},
+          {"field": "Suburb", "type": "nominal"},
+          {"field": "State", "type": "nominal"}
+        ]
+      }
+    }
+  ],
+  "resolve": {"scale": {"color": "independent"}},
+  "config": {"legend": {"titleFontSize": 14, "labelFontSize": 12}}
+}

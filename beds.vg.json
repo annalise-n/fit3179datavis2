@@ -1,0 +1,20 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Heatmap showing beds per 1000 population by state over time",
+  "width": 700,
+  "height": 400,
+  "data": {"url": "Public_State_Beds.csv"},
+  "mark": "rect",
+  "encoding": {
+    "x": {"field": "Year", "type": "ordinal", "title": "Year"},
+    "y": {"field": "State", "type": "ordinal", "title": "State"},
+    "color": {"field": "Per 1000 Population", "type": "quantitative", "title": "Beds per 1000", "scale": {"scheme": "reds"}},
+    "tooltip": [
+      {"field": "State"},
+      {"field": "Year"},
+      {"field": "Available Beds"},
+      {"field": "Per 1000 Population"}
+    ]
+  },
+  "config": {"axis": {"labelFontSize": 12, "titleFontSize": 14}, "legend": {"labelFontSize": 12, "titleFontSize": 14}}
+}
